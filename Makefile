@@ -13,6 +13,7 @@ all: build-deb
 
 build-deb: build-binary prepare-service prepare-deb-files
 	dpkg-deb --build $(DEB_DIR)
+	dpkg-name $(BUILD_DIR)/deb.deb
 
 build-binary:
 	go build -o $(APP_NAME)
