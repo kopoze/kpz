@@ -93,7 +93,17 @@ At the end, validate your configuration with `sudo nginx -t` and if everything i
 
 #### PostgreSQL configuration
 
-WIP
+Create a `.env` file with the following keys:
+
+```ini
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=i-am-groot
+DB_NAME=kopoze
+DB_PASSWORD=MyStr0ngP@ssw0rD
+```
+
+Of course feel free to change it according to your settings.
 
 #### Run the program
 
@@ -109,7 +119,10 @@ You can use the existing API under `http://locahost:8080/cli/apps/` or add direc
 
 Here is the JSON format to create app:
 
-```json
+```http
+POST http://localhost:8080/cli/apps/
+Content-Type: application/json
+
 {
     "name": "App1",
     "subdomain": "app1",
