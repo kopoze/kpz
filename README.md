@@ -125,4 +125,4 @@ For know, accessing Django admin with this tool need specific configuration on D
 
 ## Author
 
-&copy; [Hantsaniala Eléo](https://t.me/hantsaniala3) 2023
+&copy; [Kopoze](https://t.me/hantsaniala3) 2023
