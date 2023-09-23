@@ -1,8 +1,11 @@
 package server
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/kopoze/kpz/pkg/app"
+	"github.com/kopoze/kpz/pkg/config"
 )
 
 type Routes struct {
@@ -10,11 +13,13 @@ type Routes struct {
 }
 
 func Serve() {
+	conf := config.LoadConfig()
+
 	r := Routes{router: gin.Default()}
 
 	app.ConnectDB()
 
 	RegisterRoutes(&r)
 
-	r.router.Run(":8080")
+	r.router.Run(fmt.Sprintf(":%s", conf.Kopoze.Port))
 }
