@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kopoze/kpz/pkg/utils"
+	"github.com/kopoze/kpz/pkg/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,13 +12,13 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() {
-	// TODO: Get value from config
+	conf := config.LoadConfig()
 	var (
-		host     = utils.GetEnv("DB_HOST")
-		port     = utils.GetEnv("DB_PORT")
-		user     = utils.GetEnv("DB_USER")
-		dbname   = utils.GetEnv("DB_NAME")
-		password = utils.GetEnv("DB_PASSWORD")
+		host     = conf.Database.Host
+		port     = conf.Database.Port
+		user     = conf.Database.User
+		dbname   = conf.Database.Name
+		password = conf.Database.Password
 	)
 
 	conn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",

@@ -12,13 +12,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kopoze/kpz/pkg/app"
+	"github.com/kopoze/kpz/pkg/config"
 	"golang.org/x/net/http2"
 )
 
 func ReverseProxy() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// TODO: Get appDomain value from config
-		appDomain := ".project.mg"
+		conf := config.LoadConfig()
+		appDomain := fmt.Sprintf(".%s", conf.Kopoze.Domain)
 		sub := strings.Replace(c.Request.Host, appDomain, "", 1)
 
 		var currApp app.App
