@@ -38,7 +38,7 @@ func NewConfig(name string, shell string, remote string, branch string) Config {
 	}
 }
 
-func InitConfig() {
+func Configure() {
 	log.Println("Initializing config")
 	viper.SetConfigName(FILE_CONFIG)
 	viper.SetConfigType(FILE_TYPE)
