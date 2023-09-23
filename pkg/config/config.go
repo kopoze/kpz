@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"runtime"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -91,23 +90,11 @@ func LoadConfig() Config {
 }
 
 func GetConfigPath() string {
-	configPath := filepath.Join(getUserHomeDir(), ".kopoze")
+	configPath := filepath.Join("/etc", "kopoze")
 	if err := os.MkdirAll(configPath, os.ModePerm); err != nil {
 		panic(err)
 	}
 	return configPath
-}
-
-func getUserHomeDir() string {
-	// Source: https://stackoverflow.com/a/7922977/5527968
-	if runtime.GOOS == "windows" {
-		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
-		if home == "" {
-			home = os.Getenv("USERPROFILE")
-		}
-		return home
-	}
-	return os.Getenv("HOME")
 }
 
 // Update `dst` struct value to match `src` struct.
