@@ -22,7 +22,7 @@ prepare-service:
 	mkdir -p $(DEB_DIR)/etc/systemd/system/
 	touch $(DEB_DIR)/etc/systemd/system/$(APP_NAME).service
 	echo "[Unit]" > $(SERVICE_FILE)
-	echo "Description=DevOps toolkits made with Go" >> $(SERVICE_FILE)
+	echo "Description=DevOps CLI toolkits made with Go" >> $(SERVICE_FILE)
 	echo "" >> $(SERVICE_FILE)
 	echo "[Service]" >> $(SERVICE_FILE)
 	echo "ExecStart=/usr/local/bin/$(GO_BINARY)" >> $(SERVICE_FILE)
@@ -40,7 +40,7 @@ prepare-deb-files:
 	echo "Version: $(VERSION)" >> $(CONTROL_FILE)
 	echo "Architecture: amd64" >> $(CONTROL_FILE)
 	echo "Maintainer: Hantsaniala Eléo <hantsaniala@gmail.com>" >> $(CONTROL_FILE)
-	echo "Description: DevOps toolkits made with Go" >> $(CONTROL_FILE)
+	echo "Description: DevOps CLI toolkits made with Go" >> $(CONTROL_FILE)
 	cp $(APP_NAME) $(INSTALL_DIR)
 
 clean:
