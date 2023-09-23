@@ -27,7 +27,7 @@ type Config struct {
 }
 
 // Create new Config.
-func NewConfig(name string, shell string, remote string, branch string) Config {
+func NewConfig() Config {
 	return Config{
 		ConfigOptions{
 			Kopoze:   NewKopozeConfig(KopozeOptions{}),
@@ -44,7 +44,7 @@ func Configure() {
 	viper.SetConfigType(FILE_TYPE)
 	viper.AddConfigPath(getConfigPath())
 
-	var conf = NewConfig("test", "", "", "")
+	var conf = NewConfig()
 
 	SetConfig("kopoze", conf.Kopoze.KopozeOptions)
 	SetConfig("docker", conf.Docker.DockerOptions)
