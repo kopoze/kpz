@@ -5,6 +5,7 @@ import "log"
 type DBOptions struct {
 	Engine   string `mapstructure:"engine"`
 	Host     string `mapstructure:"host"`
+	Name     string `mapstructure:"name"`
 	Port     string `mapstructure:"port"`
 	User     string `mapstructure:"user"`
 	Password string `mapstructure:"password"`
@@ -19,6 +20,7 @@ var (
 	DB_ENGINE   = "postgresql"
 	DB_HOST     = "localhost"
 	DB_PORT     = "5432"
+	DB_NAME     = "kopoze"
 	DB_USER     = "root"
 	DB_PASSWORD = "root"
 )
@@ -28,6 +30,7 @@ func NewDBConfig(opt DBOptions) DBConfig {
 		DBOptions{
 			Engine:   DB_ENGINE,
 			Host:     DB_HOST,
+			Name:     DB_NAME,
 			Port:     DB_PORT,
 			User:     DB_USER,
 			Password: DB_PASSWORD,
