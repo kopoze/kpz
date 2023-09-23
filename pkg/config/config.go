@@ -67,6 +67,12 @@ func SetConfig(g string, o SpecificConfig) {
 
 func LoadConfig() Config {
 	log.Println("Reading existing config")
+	config_file := filepath.Join(getConfigPath(), fmt.Sprintf("%s.%s", FILE_CONFIG, FILE_TYPE))
+	if _, err := os.Stat(config_file); errors.Is(err, os.ErrNotExist) {
+		log.Println("Config file not found")
+		log.Fatal("Please run `kpz configure` to initialize configuration")
+	}
+
 	viper.SetConfigName(FILE_CONFIG)
 	viper.SetConfigType(FILE_TYPE)
 	viper.AddConfigPath(getConfigPath())
