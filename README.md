@@ -91,19 +91,27 @@ Note that the port used inside your config is the port that will be used when st
 
 At the end, validate your configuration with `sudo nginx -t` and if everything is ok, restart your nginx server with `sudo systemctl restart nginx`.
 
-#### PostgreSQL configuration
+### Init configuration
 
-Create a `.env` file with the following keys:
+To set up default config, run the following command first:
 
-```ini
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=i-am-groot
-DB_NAME=kopoze
-DB_PASSWORD=MyStr0ngP@ssw0rD
+```sh
+kpz configure
 ```
 
-Of course feel free to change it according to your settings.
+#### PostgreSQL configuration
+
+To configure your database, edit the config file inside `~/.kopoze/kopoze.toml` and put your custom value. Default value for database configuration is:
+
+```toml
+[database]
+engine = 'postgresql'
+host = 'localhost'
+password = 'root'
+port = '5432'
+user = 'root'
+name = 'kopoze'
+```
 
 #### Run the program
 
