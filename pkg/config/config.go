@@ -42,7 +42,7 @@ func Configure() {
 	log.Println("Initializing config")
 	viper.SetConfigName(FILE_CONFIG)
 	viper.SetConfigType(FILE_TYPE)
-	viper.AddConfigPath(getConfigPath())
+	viper.AddConfigPath(GetConfigPath())
 
 	var conf = NewConfig()
 
@@ -67,7 +67,7 @@ func SetConfig(g string, o SpecificConfig) {
 
 func LoadConfig() Config {
 	log.Println("Reading existing config")
-	config_file := filepath.Join(getConfigPath(), fmt.Sprintf("%s.%s", FILE_CONFIG, FILE_TYPE))
+	config_file := filepath.Join(GetConfigPath(), fmt.Sprintf("%s.%s", FILE_CONFIG, FILE_TYPE))
 	if _, err := os.Stat(config_file); errors.Is(err, os.ErrNotExist) {
 		log.Println("Config file not found")
 		log.Fatal("Please run `kpz configure` to initialize configuration")
@@ -75,7 +75,7 @@ func LoadConfig() Config {
 
 	viper.SetConfigName(FILE_CONFIG)
 	viper.SetConfigType(FILE_TYPE)
-	viper.AddConfigPath(getConfigPath())
+	viper.AddConfigPath(GetConfigPath())
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("fatal error config file: %w", err))
@@ -90,7 +90,7 @@ func LoadConfig() Config {
 	}
 }
 
-func getConfigPath() string {
+func GetConfigPath() string {
 	configPath := filepath.Join(getUserHomeDir(), ".kopoze")
 	if err := os.MkdirAll(configPath, os.ModePerm); err != nil {
 		panic(err)
