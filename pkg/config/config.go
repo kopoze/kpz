@@ -65,7 +65,7 @@ func SetConfig(g string, o SpecificConfig) {
 	}
 }
 
-func LoadConfig() {
+func LoadConfig() Config {
 	log.Println("Reading existing config")
 	viper.SetConfigName(FILE_CONFIG)
 	viper.SetConfigType(FILE_TYPE)
@@ -79,6 +79,9 @@ func LoadConfig() {
 	viper.UnmarshalKey("docker", &config.Docker.DockerOptions)
 	viper.UnmarshalKey("git", &config.Git.GitOptions)
 	viper.UnmarshalKey("kopoze", &config.Kopoze.KopozeOptions)
+	return Config{
+		config,
+	}
 }
 
 func getConfigPath() string {
