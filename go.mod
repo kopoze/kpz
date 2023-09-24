@@ -7,6 +7,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
+	github.com/txn2/txeh v1.5.5
 	golang.org/x/crypto v0.9.0
 	golang.org/x/net v0.10.0
 	gorm.io/driver/postgres v1.5.2
