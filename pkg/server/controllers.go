@@ -5,6 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kopoze/kpz/pkg/app"
+	"github.com/kopoze/kpz/pkg/config"
+	"github.com/kopoze/kpz/pkg/hosts"
 )
 
 func ListApps(c *gin.Context) {
@@ -23,16 +25,20 @@ type CreateAppInput struct {
 func CreateApp(c *gin.Context) {
 	// Validate input
 	var input CreateAppInput
+	conf := config.LoadConfig()
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Create book
-	book := app.App{Name: input.Name, Subdomain: input.Subdomain, Port: input.Port}
-	app.DB.Create(&book)
-
-	c.JSON(http.StatusOK, gin.H{"data": book})
+	// Create currApp
+	currApp := app.App{Name: input.Name, Subdomain: input.Subdomain, Port: input.Port}
+	app.DB.Create(&currApp)
+	if conf.Kopoze.Mode == "local" {
+		hosts.AddSubdomain(currApp.Subdomain)
+	}
+	c.JSON(http.StatusOK, gin.H{"data": currApp})
 }
 
 func FindApp(c *gin.Context) {
@@ -56,6 +62,8 @@ type UpdateAppInput struct {
 func UpdateApp(c *gin.Context) {
 	// Get model if exist
 	var currApp app.App
+	conf := config.LoadConfig()
+
 	if err := app.DB.Where("id = ?", c.Param("id")).First(&currApp).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -68,19 +76,28 @@ func UpdateApp(c *gin.Context) {
 		return
 	}
 
+	oldApp := currApp
 	app.DB.Model(&currApp).Updates(input)
-
+	if conf.Kopoze.Mode == "local" && oldApp.Subdomain != currApp.Subdomain {
+		hosts.RemoveSubdomain(oldApp.Subdomain)
+		hosts.AddSubdomain(currApp.Subdomain)
+	}
 	c.JSON(http.StatusOK, gin.H{"data": currApp})
 }
 
 func DeleteApp(c *gin.Context) {
 	// Get model if exist
 	var currApp app.App
+	conf := config.LoadConfig()
+
 	if err := app.DB.Where("id = ?", c.Param("id")).First(&currApp).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
 
+	if conf.Kopoze.Mode == "local" {
+		hosts.RemoveSubdomain(currApp.Subdomain)
+	}
 	app.DB.Delete(&currApp)
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
