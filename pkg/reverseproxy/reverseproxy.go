@@ -19,6 +19,11 @@ import (
 func ReverseProxy() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		conf := config.LoadConfig()
+		// Skip middleware processing if kopoze app direct call
+		if c.Request.Host == fmt.Sprintf("localhost:%s", conf.Kopoze.Port) {
+			c.Next()
+			return
+		}
 		appDomain := fmt.Sprintf(".%s", conf.Kopoze.Domain)
 		sub := strings.Replace(c.Request.Host, appDomain, "", 1)
 

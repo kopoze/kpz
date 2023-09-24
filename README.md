@@ -24,15 +24,15 @@ wget -O - https://github.com/hantsaniala/kopoze/raw/main/install.sh | sudo bash
 
 The following step will be added to `install.sh` later.
 
-#### Configure your hosts
+### Init configuration
 
-Add this line to your `/etc/hosts` file.
+To set up default config, run the following command first:
 
-```text
-127.0.0.1  project.mg  app1.project.mg
+```sh
+sudo kpz configure
 ```
 
-**Note:** For now, all subdomain must sepecified manually. And musti be under the domain `project.mg` for now until next update.
+Configuration file can be found under `/etc/kopoze/kopoze.toml`. You can modify it depends on your local configuration.
 
 #### Generate certificate for local https
 
@@ -41,6 +41,8 @@ Generate certificate for a wildcard subdomain.
 ```sh
 mkcert *.project.mg
 ```
+
+The domain value need to match the value you set inside your config file under `kopoze.domain`.
 
 To install and configure Mkcert, you can read more [here](https://www.howtoforge.com/how-to-create-locally-trusted-ssl-certificates-with-mkcert-on-ubuntu/).
 
@@ -91,14 +93,6 @@ Note that the port used inside your config is the port that will be used when st
 
 At the end, validate your configuration with `sudo nginx -t` and if everything is ok, restart your nginx server with `sudo systemctl restart nginx`.
 
-### Init configuration
-
-To set up default config, run the following command first:
-
-```sh
-kpz configure
-```
-
 #### PostgreSQL configuration
 
 To configure your database, edit the config file inside `~/.kopoze/kopoze.toml` and put your custom value. Default value for database configuration is:
@@ -118,8 +112,10 @@ name = 'kopoze'
 Now you can run the cli with
 
 ```sh
-kpz serve
+sudo kpz serve
 ```
+
+Note that in local mode, to update existing hosts, you must run this app in sudo mode.
 
 #### Add your app
 
@@ -138,7 +134,17 @@ Content-Type: application/json
 }
 ```
 
-After adding your app, don't forget to add this subdomain inside your `/etc/hosts`.
+Thanks to [txeh](https://github.com/txn2/txeh), you can manually add subdomains with:
+
+```sh
+sudo kpz subdomain add [sub1] [sub2] [sub3]
+```
+
+And remove them whith:
+
+```sh
+sudo kpz subdomain remove [sub1] [sub2] [sub3]
+```
 
 ## Limitation
 
