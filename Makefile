@@ -47,4 +47,4 @@ clean:
 	rm -rf $(BUILD_DIR)
 	rm -f $(APP_NAME)
 
-.PHONY: all build-deb build-binary prepare-deb-files clean
+.PHONY: all build-deb build-binary prepare-service prepare-deb-files clean
