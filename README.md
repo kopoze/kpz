@@ -7,7 +7,7 @@ DevOps toolikts made with go.
 ## Requirements
 
 - PostresSQL
-- Nginx
+- Nginx or Apache2
 - Mkcert
 
 ## Install
@@ -92,6 +92,45 @@ Don't forget to change the value of `ssl_certificate` and `ssl_certificate_key` 
 Note that the port used inside your config is the port that will be used when starting our script with `kpz serve`.
 
 At the end, validate your configuration with `sudo nginx -t` and if everything is ok, restart your nginx server with `sudo systemctl restart nginx`.
+
+#### Configure Apache2
+
+If you prefere using apache, here is a configuration you can use:
+
+```conf
+<VirtualHost *:443>
+    ServerName project.mg
+    ServerAlias *.project.mg
+
+    SSLEngine on
+    ProxyPreserveHost On
+    SSLCertificateFile /etc/letsencrypt/live/_wildcard.project.mg/_wildcard.project.mg.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/_wildcard.project.mg/_wildcard.project.mg-key.pem
+
+    ProxyPass / http://localhost:8080/
+    ProxyPassReverse / http://localhost:8080/
+</VirtualHost>
+```
+
+Don't forget to enable these following module:
+
+```sh
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod ssl
+```
+
+Enable your config with:
+
+```sh
+sudo a2ensite project.mg.conf
+```
+
+And finally, restart your apache2 with:
+
+```sh
+sudo service apache2 restart
+```
 
 #### PostgreSQL configuration
 
