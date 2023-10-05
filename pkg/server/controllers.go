@@ -38,7 +38,7 @@ func CreateApp(c *gin.Context) {
 	if conf.Kopoze.Mode == "local" {
 		hosts.AddSubdomain(currApp.Subdomain)
 	}
-	c.JSON(http.StatusOK, gin.H{"data": currApp})
+	c.JSON(http.StatusCreated, gin.H{"data": currApp})
 }
 
 func FindApp(c *gin.Context) {
@@ -100,5 +100,5 @@ func DeleteApp(c *gin.Context) {
 	}
 	app.DB.Delete(&currApp)
 
-	c.JSON(http.StatusOK, gin.H{"data": true})
+	c.JSON(http.StatusNoContent, gin.H{"data": true})
 }
