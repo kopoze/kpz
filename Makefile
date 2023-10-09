@@ -23,6 +23,8 @@ prepare-service:
 	touch $(DEB_DIR)/etc/systemd/system/$(APP_NAME).service
 	echo "[Unit]" > $(SERVICE_FILE)
 	echo "Description=DevOps CLI toolkits made with Go" >> $(SERVICE_FILE)
+	echo "Wants=network.target" >> $(SERVICE_FILE)
+	echo "After=network.target" >> $(SERVICE_FILE)
 	echo "" >> $(SERVICE_FILE)
 	echo "[Service]" >> $(SERVICE_FILE)
 	echo "ExecStart=/usr/local/bin/$(GO_BINARY)" >> $(SERVICE_FILE)
