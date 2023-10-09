@@ -16,13 +16,34 @@ DevOps toolikts made with go.
 
 For local use, this cli is to simplify subdomain-port mapping with https of your local project.
 
-#### Get the project
+#### Get the app
+
+To get this app, go to the [release page](https://github.com/kopoze/kpz/releases/) and choose the version according to your architecture.
+
+Next, move it inside your `/urs/local/bin/` folder.
 
 ```sh
-wget -O - https://github.com/hantsaniala/kopoze/raw/main/install.sh | sudo bash
+cd /Download/
+wget -c https://github.com/kopoze/kpz/releases/download/{tag}/{filename}
+mv ./kpz /urs/local/bin/
 ```
 
-The following step will be added to `install.sh` later.
+Or you can clone this repo and manually compile this project on your computer.
+
+```sh
+git clone https://github.com/kopoze/kpz
+cd kpz
+go get -d -v ./...
+make
+```
+
+You will find the `.deb` inside the `build` folder.
+
+You then can install you `.deb` with:
+
+```sh
+sudo dpkg -i kpz-*.deb
+```
 
 ### Init configuration
 
