@@ -20,7 +20,7 @@ For local use, this cli is to simplify subdomain-port mapping with https of your
 
 To get this app, go to the [release page](https://github.com/kopoze/kpz/releases/) and choose the version according to your architecture.
 
-Next, move it inside your `/urs/local/bin/` folder.
+Next, move it inside your `/usr/local/bin/` folder.
 
 ```sh
 cd /Download/
@@ -155,7 +155,7 @@ sudo service apache2 restart
 
 #### PostgreSQL configuration
 
-To configure your database, edit the config file inside `~/.kopoze/kopoze.toml` and put your custom value. Default value for database configuration is:
+To configure your database, edit the config file inside `/etc/kopoze/kopoze.toml` and put your custom value. Default value for database configuration is:
 
 ```toml
 [database]
