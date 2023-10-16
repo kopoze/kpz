@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/kopoze/kpz/pkg/app"
 	"github.com/kopoze/kpz/pkg/config"
 	"github.com/txn2/txeh"
 )
@@ -25,6 +26,46 @@ func InitDomain() {
 	err = hosts.Save()
 	if err != nil {
 		log.Panic(err)
+	}
+}
+
+func SetDomain() {
+	var old_domain string
+	conf := config.LoadConfig()
+	curr_domain := conf.Kopoze.Domain
+	old_domain, err := config.GetOldDomain()
+	if err != nil && !os.IsNotExist(err) {
+		log.Panic(err)
+	}
+	hosts, err := txeh.NewHostsDefault()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if os.IsNotExist(err) || old_domain == "" {
+		config.SetOldDomain(curr_domain)
+	}
+
+	if curr_domain != old_domain {
+		log.Println("Updating existing domain")
+		backupHosts(hosts)
+
+		hosts.RemoveHost(old_domain)
+		hosts.AddHost("127.0.0.1", curr_domain)
+
+		var apps []app.App
+		app.ConnectDB()
+		app.DB.Find(&apps)
+		for _, currApp := range apps {
+			hosts.RemoveHost(fmt.Sprintf("%s.%s", currApp.Subdomain, old_domain))
+			hosts.AddHost("127.0.0.1", fmt.Sprintf("%s.%s", currApp.Subdomain, curr_domain))
+		}
+
+		config.SetOldDomain(curr_domain)
+		// TODO: Update nginx config
+		// TODO: Dynamic reload server
+		// TODO: Add redirect from old_domain to new_domain
+		log.Printf("Updating hosts successfully.\n\nTo finalize the configuration update, you need to: \n1. manually change your nginx config file value: \n\tfrom\t'*.%s' \n\tto\t'*.%s'\n2. Restart server", old_domain, curr_domain)
 	}
 }
 
