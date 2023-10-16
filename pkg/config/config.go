@@ -1,10 +1,12 @@
 package config
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -147,4 +149,39 @@ func isEmpty(value interface{}) bool {
 	}
 
 	return v.IsZero()
+}
+
+func SetOldDomain(domain string) (string, error) {
+	filename := path.Join(GetConfigPath(), "old_domain")
+
+	// Check if file exist first, then create if not
+	var _, err = os.Stat(filename)
+	if os.IsNotExist(err) {
+		f, err := os.Create(filename)
+		if err != nil {
+			return "", err
+		}
+		defer f.Close()
+	}
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		return "", err
+	}
+	fmt.Fprint(f, domain)
+	return "Domain updated successfuly", nil
+}
+
+func GetOldDomain() (string, error) {
+	filename := path.Join(GetConfigPath(), "old_domain")
+	f, err := os.Open(filename)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		return scanner.Text(), nil
+	}
+	return "", nil
 }
